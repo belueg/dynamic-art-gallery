@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-background text-secondary;
+}
+
+.annotation-editor {
+  @apply bg-white border border-border p-2 z-50;
+}
+
+textarea {
+  @apply w-full h-full resize-none;
+}
+
+.textPrimary {
+  @apply text-textPrimary;
+}
