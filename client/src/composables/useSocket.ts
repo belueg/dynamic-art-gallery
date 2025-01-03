@@ -23,55 +23,9 @@ export function useSocket() {
     })
   })
 
-  socket.on('updateImages', images => {
-    canvasState.value.images = images
-  })
-
-  socket.on('addAnnotation', annotation => {
-    canvasState.value.annotations.push(annotation)
-  })
-
-  socket.on('updateAnnotationPosition', ({ id, x, y }) => {
-    const annotation = canvasState.value.annotations.find(ann => ann.id === id)
-    if (annotation) {
-      annotation.x = x
-      annotation.y = y
-    }
-
-    socket.on('updateAnnotationSize', ({ id, x, y, width, height }) => {
-      const annotation = canvasState.value.annotations.find(
-        ann => ann.id === id
-      )
-      if (annotation) {
-        annotation.x = x
-        annotation.y = y
-        annotation.width = width
-        annotation.height = height
-      }
-    })
-
-    socket.on('updateAnnotationText', ({ id, text }) => {
-      const annotation = canvasState.value.annotations.find(
-        ann => ann.id === id
-      )
-      if (annotation) {
-        annotation.text = text
-      }
-    })
-  })
-
-  socket.on('updateColorTheme', ({ color }) => {
-    canvasState.value.themeColor = color
-  })
-
   onUnmounted(() => {
     socket.off('initialize')
-    socket.off('updateAnnotationColor')
-    socket.off('updateImages')
-    socket.off('addAnnotation')
-    socket.off('updateAnnotationPosition')
-    socket.off('updateAnnotationSize')
-    socket.off('updateAnnotationText')
+    socket.off('canvasUpdate')
   })
 
   const emitUpdateColorTheme = color => {
@@ -79,26 +33,20 @@ export function useSocket() {
     console.log('updateColorTheme', { color })
   }
 
-  const emitAddImage = imageData => {
-    console.log('emitAddImage', imageData)
-    socket.emit('addImage', imageData)
+  const emitAddOrUpdateImage = imageData => {
+    console.log('emitAddOrUpdateImage', imageData)
+    socket.emit('addOrUpdateImage', imageData)
   }
 
-  const emitAddAnnotation = annotation => {
-    socket.emit('addAnnotation', annotation)
-    console.log('emitAddAnnotation', annotation)
-  }
-
-  const emitUpdateAnnotationText = annotation => {
-    socket.emit('addAnnotation', annotation)
-    console.log('emitAddAnnotation', annotation)
+  const emitAddOrUpdateAnnotation = annotation => {
+    socket.emit('addOrUpdateAnnotationText', annotation)
+    console.log('addOrUpdateAnnotationText', annotation)
   }
 
   return {
     canvasState,
     emitUpdateColorTheme,
-    emitAddImage,
-    emitAddAnnotation,
-    emitUpdateAnnotationText
+    emitAddOrUpdateImage,
+    emitAddOrUpdateAnnotation
   }
 }

@@ -21,11 +21,11 @@
 import { useSocket } from '@/composables/useSocket'
 import { debounce } from 'lodash'
 
-const { emitAddImage } = useSocket()
+const { emitAddOrUpdateImage } = useSocket()
 const props = defineProps<{ image: Image, color: string }>()
 
 const updatePosition = (left: number, top: number) => {
-  emitAddImage({ ...props.image, x: left, y: top })
+  emitAddOrUpdateImage({ ...props.image, x: left, y: top })
 }
 
 const updateSize = (
@@ -34,7 +34,7 @@ const updateSize = (
   width: number,
   height: number
 ) => {
-  emitAddImage({ id: props.image.id, x: left, y: top, width, height })
+  emitAddOrUpdateImage({ id: props.image.id, x: left, y: top, width, height })
 }
 
 const debouncedUpdatePosition = debounce(updatePosition, 100)

@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref, defineExpose } from 'vue'
 import { useSocket } from '@/composables/useSocket'
-const { emitAddImage } = useSocket()
+const { emitAddOrUpdateImage } = useSocket()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
@@ -48,7 +48,7 @@ const handleFileUpload = (event: Event) => {
               height
             }
           )
-          emitAddImage({ id, src: reader.result as string, width, height })
+          emitAddOrUpdateImage({ id, src: reader.result as string, width, height })
         }
         img.src = reader.result as string
       }

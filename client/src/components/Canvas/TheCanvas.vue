@@ -19,7 +19,7 @@
       :color="canvasState.themeColor"
       :key="image.id"
       :image="image"
-      @update-position="emitAddImage"
+      @update-position="emitAddOrUpdateImage"
       @click.stop
     />
     <TextAnnotation
@@ -53,7 +53,8 @@ const editorX = ref(0)
 const editorY = ref(0)
 const mode = ref('')
 
-const { canvasState, emitAddAnnotation, emitAddImage } = useSocket()
+const { canvasState, emitAddOrUpdateAnnotation, emitAddOrUpdateImage } =
+  useSocket()
 
 const updateMode = (newMode: string) => (mode.value = newMode)
 
@@ -68,7 +69,7 @@ const handleCanvasClick = (event: MouseEvent) => {
 const saveAnnotation = (text: string) => {
   const id = Date.now()
   if (!text) return
-  emitAddAnnotation({
+  emitAddOrUpdateAnnotation({
     id,
     text,
     x: editorX.value,

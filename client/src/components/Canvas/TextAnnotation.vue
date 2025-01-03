@@ -6,7 +6,9 @@
     :h="annotation.height"
     :parent="true"
     @dragging="(left, top) => updatePosition(left, top)"
-    @resizing="(left, top, width, height) => updateSize(left, top, width, height)"
+    @resizing="
+      (left, top, width, height) => updateSize(left, top, width, height)
+    "
     @click.stop
   >
     <div
@@ -30,7 +32,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useSocket } from '@/composables/useSocket'
-const { emitAddAnnotation, emitUpdateAnnotationText } = useSocket()
+const { emitAddOrUpdateAnnotation } = useSocket()
 
 const props = defineProps<{
   annotation: {
@@ -56,12 +58,12 @@ const saveText = () => {
     width: props.annotation.width,
     height: props.annotation.height
   }
-  emitUpdateAnnotationText(newAnnotation)
+  emitAddOrUpdateAnnotation(newAnnotation)
   editMode.value = false
 }
 
 const updatePosition = (x: number, y: number) => {
-  emitAddAnnotation({
+  emitAddOrUpdateAnnotation({
     id: props.annotation.id,
     text: localText.value,
     x,
@@ -77,9 +79,14 @@ const updateSize = (
   width: number,
   height: number
 ) => {
-  emitAddAnnotation({ id: props.annotation.id, x: left, y: top, width, height })
+  emitAddOrUpdateAnnotation({
+    id: props.annotation.id,
+    x: left,
+    y: top,
+    width,
+    height
+  })
 }
-
 </script>
 
 <style scoped>
