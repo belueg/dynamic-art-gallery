@@ -1,19 +1,15 @@
 interface Image {
   id: string
   src: string
-  x: number
-  y: number
+  x?: number
+  y?: number
   width: number
   height: number
 }
 
-interface NewImage {
-  id: string
-  src: string
-}
-
-interface UpdateImagePosition {
-  id: string
+interface Annotation {
+  id: number
+  text: string
   x: number
   y: number
   width: number

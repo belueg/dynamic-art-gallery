@@ -1,15 +1,16 @@
 <template>
   <EditorMenu @updateMode="updateMode" />
-  <p
-    :style="{ visibility: mode === 'text' ? 'visible' : 'hidden' }"
-    class="text-lg text-blue-600 mt-4 mb-2"
-  >
-    Click on the canvas to insert text
-  </p>
-  <p class="text-lg mt-4 mb-2">
+  <p class="text-lg mb-2">
     To edit an annotation, click on the desired text and press enter to save
     when you are done.
   </p>
+  <p
+    :style="{ visibility: mode === 'text' ? 'visible' : 'hidden' }"
+    class="text-lg text-blue-600 mb-2"
+  >
+    Click on the canvas to insert text
+  </p>
+
   <div
     class="relative border border-gray-300 bg-gray-100 h-[44rem] w-full"
     @click="handleCanvasClick"
@@ -22,7 +23,7 @@
       @update-position="emitAddOrUpdateImage"
       @click.stop
     />
-    <TextAnnotation
+    <TextAnnotationItem
       v-for="annotation in canvasState.annotations"
       :key="annotation.id"
       :color="canvasState.themeColor"
@@ -42,19 +43,20 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import ImageItem from './ImageItem.vue'
-import TextAnnotation from './TextAnnotation.vue'
-import AnnotationEditor from './AnnotationEditor.vue'
-import EditorMenu from '../Shared/EditorMenu.vue'
-import { useSocket } from '@/composables/useSocket'
+import ImageItem from './items/ImageItem.vue'
+import TextAnnotationItem from './items/TextAnnotationItem.vue'
+import AnnotationEditor from '../editorMenu/tools/AnnotationEditor.vue'
+import EditorMenu from '../editorMenu/EditorMenu.vue'
+import { useCanvasState } from '@/composables/useCanvasState'
+import { useCanvasEvents } from '@/composables/useCanvasEvents'
 
 const showEditor = ref(false)
 const editorX = ref(0)
 const editorY = ref(0)
 const mode = ref('')
 
-const { canvasState, emitAddOrUpdateAnnotation, emitAddOrUpdateImage } =
-  useSocket()
+const { canvasState } = useCanvasState()
+const { emitAddOrUpdateAnnotation, emitAddOrUpdateImage } = useCanvasEvents()
 
 const updateMode = (newMode: string) => (mode.value = newMode)
 

@@ -13,22 +13,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineExpose } from 'vue'
-import { useSocket } from '@/composables/useSocket'
-const { emitAddOrUpdateImage } = useSocket()
+import { ref } from 'vue'
+import { useCanvasEvents } from '@/composables/useCanvasEvents'
+
+const { emitAddOrUpdateImage } = useCanvasEvents()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
 const openFilePicker = () => {
   fileInput.value?.click()
 }
+
 defineExpose({ openFilePicker })
 
 const handleFileUpload = (event: Event) => {
-  console.log('handleFileUpload ~ event:', event)
   const files = (event.target as HTMLInputElement).files
-
-  console.log('handleFileUpload ~ files:', files)
 
   if (files) {
     Array.from(files).forEach(file => {
@@ -39,16 +38,13 @@ const handleFileUpload = (event: Event) => {
           const id = Date.now().toString()
           const width = 50
           const height = 50
-          console.log(
-            'Array.from ~ { id, src: reader.result as string, width, height }:',
-            {
-              id,
-              src: reader.result as string,
-              width,
-              height
-            }
-          )
-          emitAddOrUpdateImage({ id, src: reader.result as string, width, height })
+
+          emitAddOrUpdateImage({
+            id,
+            src: reader.result as string,
+            width,
+            height
+          })
         }
         img.src = reader.result as string
       }

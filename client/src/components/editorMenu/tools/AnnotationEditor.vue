@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 
 defineProps<{ x: number; y: number }>()
 const emit = defineEmits(['save', 'close'])

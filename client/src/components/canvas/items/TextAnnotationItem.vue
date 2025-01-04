@@ -5,10 +5,8 @@
     :w="annotation.width"
     :h="annotation.height"
     :parent="true"
-    @dragging="(left, top) => updatePosition(left, top)"
-    @resizing="
-      (left, top, width, height) => updateSize(left, top, width, height)
-    "
+    @dragging="updatePosition"
+    @resizing="updateSize"
     @click.stop
   >
     <div
@@ -31,18 +29,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useSocket } from '@/composables/useSocket'
-const { emitAddOrUpdateAnnotation } = useSocket()
+import { useCanvasEvents } from '@/composables/useCanvasEvents'
+const { emitAddOrUpdateAnnotation } = useCanvasEvents()
 
 const props = defineProps<{
-  annotation: {
-    id: string
-    text: string
-    x: number
-    y: number
-    width: number
-    height: number
-  }
+  annotation: Annotation
   color: string
 }>()
 
@@ -51,12 +42,8 @@ const localText = ref(props.annotation.text)
 
 const saveText = () => {
   const newAnnotation = {
-    id: props.annotation.id,
-    text: localText.value,
-    x: props.annotation.x,
-    y: props.annotation.y,
-    width: props.annotation.width,
-    height: props.annotation.height
+    ...props.annotation,
+    text: localText.value
   }
   emitAddOrUpdateAnnotation(newAnnotation)
   editMode.value = false
@@ -64,12 +51,10 @@ const saveText = () => {
 
 const updatePosition = (x: number, y: number) => {
   emitAddOrUpdateAnnotation({
-    id: props.annotation.id,
+    ...props.annotation,
     text: localText.value,
     x,
-    y,
-    width: props.annotation.width,
-    height: props.annotation.height
+    y
   })
 }
 

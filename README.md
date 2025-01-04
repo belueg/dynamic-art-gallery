@@ -1,4 +1,4 @@
-# Art Gallery
+# Dynamic Art Gallery
 
 This project is a dynamic art gallery application built with Vue 3, Vite, and Socket.IO. It allows users to add, update, and annotate images on a shared canvas in real-time.
 
@@ -8,27 +8,26 @@ This project is a dynamic art gallery application built with Vue 3, Vite, and So
 - Drag-and-drop functionality for images and annotations
 - Color theme customization
 - Text annotations with inline editing
-- Responsive design
 
 ## Project Structure
 
-- `client/`: Contains the frontend code
-  - `src/`: Source code for the Vue application
-    - `components/`: Vue components
-    - `composables/`: Reusable Vue composition functions
-    - `router/`: Vue Router configuration
-    - `assets/`: Static assets and styles
-    - `views/`: Vue views
-    - `types/`: TypeScript type definitions
-  - `public/`: Static files served by the frontend
-  - `index.html`: Entry point for the Vue application
-  - `package.json`: Dependencies and scripts for the frontend
-  - `tsconfig.json`: TypeScript configuration for the frontend
-  - `vite.config.ts`: Vite configuration for the frontend
-- `server/`: Contains the backend code
-  - `index.js`: Entry point for the Express server
-  - `socketHandlers.js`: Socket.IO event handlers
-  - `package.json`: Dependencies and scripts for the backend
+- [`client/`](client/): Contains the frontend code
+  - [`src/`](client/src/): Source code for the Vue application
+    - [`components/`](client/src/components/): Vue components
+    - [`composables/`](client/src/composables/): Reusable Vue composition functions
+    - [`router/`](client/src/router/): Vue Router configuration
+    - [`assets/`](client/src/assets/): Static assets and styles
+    - [`views/`](client/src/views/): Vue views
+    - [`types/`](client/src/types/): TypeScript type definitions
+  - [`public/`](client/public/): Static files served by the frontend
+  - [`index.html`](client/index.html): Entry point for the Vue application
+  - [`package.json`](client/package.json): Dependencies and scripts for the frontend
+  - [`tsconfig.json`](client/tsconfig.json): TypeScript configuration for the frontend
+  - [`vite.config.ts`](client/vite.config.ts): Vite configuration for the frontend
+- [`server/`](server/): Contains the backend code
+  - [`index.js`](server/index.js): Entry point for the Express server
+  - [`socketHandlers.js`](server/socketHandlers.js): Socket.IO event handlers
+  - [`package.json`](server/package.json): Dependencies and scripts for the backend
 
 ## Installation
 

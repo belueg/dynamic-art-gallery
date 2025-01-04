@@ -9,16 +9,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Sketch } from '@ckpack/vue-color'
-import { useSocket } from '@/composables/useSocket'
+import { useCanvasEvents } from '@/composables/useCanvasEvents'
 
 const colors = ref({ hex: '#000000', rgba: { r: 0, g: 0, b: 0, a: 1 } })
 
-const { emitUpdateColorTheme } = useSocket()
+const { emitUpdateColorTheme } = useCanvasEvents()
 
 const updateColor = () => {
-  console.log('updateColor')
-  console.log(colors.value)
-
   if (colors.value.hex) {
     emitUpdateColorTheme(colors.value.hex)
   }
@@ -27,6 +24,6 @@ const updateColor = () => {
 
 <style>
 .sketch {
-  position: absolute!important;
+  position: absolute !important;
 }
 </style>
