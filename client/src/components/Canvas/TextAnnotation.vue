@@ -81,6 +81,7 @@ const updateSize = (
 ) => {
   emitAddOrUpdateAnnotation({
     id: props.annotation.id,
+    text: localText.value,
     x: left,
     y: top,
     width,

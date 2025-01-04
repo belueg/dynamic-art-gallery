@@ -1,4 +1,9 @@
 const _ = require('lodash')
+const {
+  colorSchema,
+  imageSchema,
+  annotationSchema
+} = require('./validators/validationSchemas')
 
 /**
  * @typedef {Object} GalleryCanvasState
@@ -16,6 +21,11 @@ let canvasState = {
 
 let activeConnections = 0
 
+function emitCanvasUpdate(socket) {
+  socket.broadcast.emit('canvasUpdate', canvasState)
+  socket.emit('canvasUpdate', canvasState)
+}
+
 function initializeSocket(io) {
   io.on('connection', socket => {
     activeConnections++
@@ -29,39 +39,53 @@ function initializeSocket(io) {
     io.emit('canvasUpdate', canvasState)
 
     socket.on('updateColorTheme', ({ color }) => {
+      const { error } = colorSchema.validate({ color })
+      if (error) {
+        console.error('Invalid color data:', error.details)
+        return
+      }
       canvasState.themeColor = color
       console.log('updateColorTheme server', color)
 
-      socket.broadcast.emit('canvasUpdate', canvasState)
-      socket.emit('canvasUpdate', canvasState)
+      emitCanvasUpdate(socket)
     })
 
     socket.on('addOrUpdateImage', imageData => {
       console.log('addOrUpdateImage server', imageData)
-      const index = canvasState.images.findIndex(
-        image => image.id === imageData.id
-      )
+
+      const { error } = imageSchema.validate(imageData)
+      if (error) {
+        console.error('Invalid image data:', error.details)
+        return
+      }
+      console.log('addOrUpdateImage server', imageData)
+
+      const index = _.findIndex(canvasState.images, { id: imageData.id })
+
       if (index !== -1) {
         _.assign(canvasState.images[index], imageData)
       } else {
         canvasState.images.push(imageData)
       }
-      socket.broadcast.emit('canvasUpdate', canvasState)
-      socket.emit('canvasUpdate', canvasState)
+      emitCanvasUpdate(socket)
     })
 
     socket.on('addOrUpdateAnnotationText', annotation => {
       console.log('addOrUpdateAnnotationText server', annotation)
-      const index = canvasState.annotations.findIndex(
-        annot => annot.id === annotation.id
-      )
+      const { error } = annotationSchema.validate(annotation)
+      if (error) {
+        console.error('Invalid annotation data:', error.details)
+        return
+      }
+
+      const index = _.findIndex(canvasState.annotations, { id: annotation.id })
+
       if (index !== -1) {
         _.assign(canvasState.annotations[index], annotation)
       } else {
         canvasState.annotations.push(annotation)
       }
-      socket.broadcast.emit('canvasUpdate', canvasState)
-      socket.emit('canvasUpdate', canvasState)
+      emitCanvasUpdate(socket)
     })
 
     socket.on('disconnect', () => {
